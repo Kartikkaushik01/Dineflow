@@ -1,0 +1,13 @@
+const CART_KEY="dineflow_cart";
+function getCart(){try{return JSON.parse(localStorage.getItem(CART_KEY)||"[]")}catch{return[]}}
+function saveCart(c){localStorage.setItem(CART_KEY,JSON.stringify(c));updateCartCount()}
+function updateCartCount(){const el=document.getElementById("cart-count");if(el)el.textContent=getCart().reduce((s,x)=>s+x.qty,0)}
+function addToCart(id,name,price){let c=getCart(),x=c.find(i=>i.id===id);if(x)x.qty++;else c.push({id,name,price,qty:1});saveCart(c);alert(name+" added to cart");}
+function renderCart(){const box=document.getElementById("cart-items");if(!box)return;let c=getCart();if(!c.length){box.innerHTML="<p>Your cart is empty. <a href='/menu'>Browse menu</a></p>";return}box.innerHTML=c.map((x,i)=>`<div class="order-row"><div><b>${x.name}</b><small>₹${x.price} × ${x.qty}</small></div><div><b>₹${(x.price*x.qty).toFixed(2)}</b> <button class="small-btn" onclick="changeQty(${i},-1)">−</button> <button class="small-btn" onclick="changeQty(${i},1)">+</button></div></div>`).join("");document.getElementById("cart-total").textContent="₹"+c.reduce((s,x)=>s+x.price*x.qty,0).toFixed(2)}
+function changeQty(i,d){let c=getCart();c[i].qty+=d;if(c[i].qty<=0)c.splice(i,1);saveCart(c);renderCart()}
+async function placeOrder(){let c=getCart();if(!c.length)return alert("Cart is empty");let res=await fetch("/api/order",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({items:c,order_type:document.getElementById("order-type").value,table_no:document.getElementById("table-no").value,payment_method:document.getElementById("payment").value})});let data=await res.json();if(!res.ok)return alert(data.error);saveCart([]);alert("Order #"+data.order_id+" placed successfully!");location.href="/orders"}
+async function bookTable(){let payload={phone:document.getElementById("b-phone").value,booking_date:document.getElementById("b-date").value,booking_time:document.getElementById("b-time").value,guests:document.getElementById("b-guests").value};let res=await fetch("/api/booking",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});let d=await res.json();if(!res.ok)return alert(d.error);alert("Booking request created!");location.reload()}
+updateCartCount();
+const search=document.getElementById("menu-search"),filter=document.getElementById("category-filter");
+function filterMenu(){document.querySelectorAll(".food-card").forEach(c=>{let ok=(!search||c.dataset.name.includes(search.value.toLowerCase()))&&(!filter||!filter.value||c.dataset.category===filter.value);c.style.display=ok?"block":"none"})}
+if(search)search.addEventListener("input",filterMenu);if(filter)filter.addEventListener("change",filterMenu);

@@ -1,0 +1,5 @@
+{% extends "base.html" %}{% block content %}
+<section class="hero"><div><span class="eyebrow">SMART RESTAURANT PLATFORM</span><h1>Run your restaurant<br><span>smarter.</span></h1><p>Orders, bookings, sales, money tracking and inventory — one modern dashboard.</p><div class="actions"><a class="btn" href="{{url_for('menu')}}">Explore Menu</a><a class="btn ghost" href="{{url_for('login')}}">Staff / Customer Login</a></div></div>
+<div class="hero-card"><div class="mini-label">TODAY'S OPERATIONS</div><div class="hero-stat">Fast • Simple • Trackable</div><div class="progress"><i></i></div><small>Real-time order workflow</small></div></section>
+<section class="features"><div><b>📦 Order Tracking</b><span>Track every order from pending to delivered.</span></div><div><b>📅 Smart Bookings</b><span>Manage reservations and assign tables.</span></div><div><b>💰 Finance</b><span>Monitor revenue, expenses and profit.</span></div><div><b>📊 Analytics</b><span>Turn restaurant data into decisions.</span></div></section>
+{% endblock %}

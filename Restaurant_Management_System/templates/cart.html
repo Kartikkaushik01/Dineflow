@@ -1,0 +1,6 @@
+{% extends "base.html" %}{% block content %}
+<section class="page-head"><div><span class="eyebrow">CHECKOUT</span><h2>Your Cart</h2></div></section>
+<div class="checkout-grid"><div class="panel"><div id="cart-items"></div></div>
+<div class="panel"><h3>Order details</h3><label>Order Type<select id="order-type"><option>Dine-In</option><option>Takeaway</option></select></label><label>Table No. (Dine-In)<input id="table-no" placeholder="e.g. T-05"></label><label>Payment<select id="payment"><option>Cash</option><option>Online</option></select></label><div class="total-line"><span>Total</span><b id="cart-total">₹0</b></div><button class="btn full" onclick="placeOrder()">Place Order</button></div></div>
+{% endblock %}
+{% block scripts %}<script>renderCart();</script>{% endblock %}
